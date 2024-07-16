@@ -1,13 +1,7 @@
-import random
 import string
 from typing import Union
 
-import nltk
-from nltk.wsd import lesk
-from nltk.corpus import stopwords, wordnet as wn
-from nltk.tokenize import word_tokenize
-from nltk.stem import WordNetLemmatizer
-from rake_nltk import Rake, Metric
+from rake_nltk import Rake
 from fastapi import FastAPI
 
 
@@ -15,13 +9,9 @@ app = FastAPI()
 
 @app.get("/")
 def read_root():
-    return {"Hello": "World"}
+    pass
 
-@app.get("/items/{item_id}")
-def read_item(item_id: int, q: Union[str,None] = None):
-    return {"item_id": item_id,"q":q}
-
-@app.post("/predict")
+@app.post("/blanks")
 def generate_blanks(q:str):
     """
     The function creates fill in the blanks questions
@@ -37,7 +27,23 @@ def generate_blanks(q:str):
         i = i.translate(str.maketrans("","",string.punctuation)).strip()
         filtered_keywords.add(i)
 
-    return {"keywords": list(filtered_keywords)}
+    return {"filtered_keywords": list(filtered_keywords)}
+
+@app.post("/matches")
+def generate_matches(q:str):
+    """
+    The function creates match the following kind of questions
+    
+    """
+    #Keyword extraction using rake-nltk
+    rake_nltk = Rake(max_length = 1, 
+                include_repeated_phrases = False,
+                punctuations = string.punctuation)
+
+    rake_nltk.extract_keywords_from_text(q)
+    keywords = rake_nltk.get_ranked_phrases()[:10]
+    
+    return {"keywords": list(keywords)}
 
     
 
