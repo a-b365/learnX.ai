@@ -1,6 +1,9 @@
-import streamlit as st
-import requests
+#Standard library imports
 import random
+
+#Third party imports
+import requests
+import streamlit as st
 import nltk
 
 st.write("# :white_check_mark: Fill in the Blanks Generator\n\n")

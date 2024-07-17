@@ -1,9 +1,10 @@
+#Standard library imports
 import string
 import random
 
-import streamlit as st
+#Third party imports
 import requests
-
+import streamlit as st
 from nltk.wsd import lesk
 from nltk.corpus import stopwords, wordnet as wn
 from nltk.tokenize import word_tokenize
