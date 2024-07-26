@@ -154,3 +154,6 @@ cython_debug/
 
 # Transformers models
 models/
+
+# Pretrained vectors
+s2v_reddit_2015_md/
