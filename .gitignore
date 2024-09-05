@@ -157,3 +157,12 @@ models/
 
 # Pretrained vectors
 s2v_reddit_2015_md/
+
+# Lightning Logs
+lightning_logs/
+
+#checkpoints
+checkpoints/
+
+#setuptools
+_version.py
