@@ -3,7 +3,8 @@
 ## Introduction
 ## Goals
 ## Contributors
-The contributor of the project is Amir Bhattarai. [www.linkedin.com/in/amir-bhattarai-1170511ab][Linkedin Profile]
+The contributor of the project is Amir Bhattarai.
+[www.linkedin.com/in/amir-bhattarai-1170511ab]
 ## Project Architecture
 
 
@@ -42,11 +43,11 @@ If you have other packages installed in the environment that are no longer neede
 
 # Data Source
 The data is available at huggingface datasets and can be accessed using the link provided below.
-[https://huggingface.co/datasets/rajpurkar/squad][Dataset Link]
+[https://huggingface.co/datasets/rajpurkar/squad]
 ## Code Structure
 ## Artifacts Location
 The artifacts are stored in the drive link given below. Inside this there is a folder named checkpoints which contains the last checkpoint when training ends. There remain files which are named last-t5b.ckpt, last-t5s.ckpt which corresponds to the t5-base model and t5-small model fine-tuned for question and/or generation tasks respectively. Similarly, the last-tc.ckpt corresponds to the distilbert-base-uncased model fine-tuned for token classification. There also remain two other folders named squad and squad-iob respectively. The squad folder contains the tokenized version of already available squad dataset customized for question and/or generation task. likewise, the squad-iob is prepared for token classification but not tokenized.
-[https://drive.google.com/drive/folders/1ZsNwsvuFRQwiP1N0hlUJ4pP6PmuKw2C9?dmr=1&ec=wgc-drive-hero-goto][Drive Link]
+[https://drive.google.com/drive/folders/1ZsNwsvuFRQwiP1N0hlUJ4pP6PmuKw2C9?dmr=1&ec=wgc-drive-hero-goto]
 # Results
 ## Metrics Used
 ## Evaluation Results
