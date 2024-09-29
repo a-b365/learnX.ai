@@ -3,16 +3,18 @@
 ## Introduction
 ## Goals
 ## Contributors
-The contributor of the project is Amir Bhattarai.
+The contributor of this project is Amir Bhattarai.
 [www.linkedin.com/in/amir-bhattarai-1170511ab]
 ## Project Architecture
 
 
 # Status
+The literature review of the project is thoroughy done and no more in-depth study is required for the completion. The training phase of the transformers are carried out iteratively. The development of user interface is also done. A minimalist system is prepared.
 ## Known Issue
+One known issue of the project is that the small dataset and minimal architecture has to led to slight underfitting while generating multiple choice questions. The other issue is that the we use named entity recognition to generate keywords which generate few/no keywords in some cases.
 ## High Level Next Steps
-
-
+1. To carry out few necessary enhancements in question generation process.
+2. To create a production level environment where users can interact with the system.
 # Usage
 ## Installation
 To begin this project, use the included `Makefile`
