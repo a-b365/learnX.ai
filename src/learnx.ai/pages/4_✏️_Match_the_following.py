@@ -1,58 +1,71 @@
-#Standard library imports
+# Standard library imports
 import string
 import random
 
-#Third party imports
+# Third party imports
 import requests
 import streamlit as st
 from nltk.wsd import lesk
-from nltk.corpus import stopwords, wordnet as wn
 from nltk.tokenize import word_tokenize
-from nltk.stem import WordNetLemmatizer
 
-st.write("# :pencil2: Match the Following Generator \n\n")
+st.markdown("<h3 style='text-align: center;'>✏️ Match the Following Generator</h3>", unsafe_allow_html=True)
+
 st.divider()
-input_text = st.text_area(label="# ***Input Context***", placeholder="Paste here...", height=300)
-button_three = st.button("***Generate***" , use_container_width=True)
 
-if button_three:
+input_text = st.text_area(
+    label="## **Input Context**", 
+    placeholder="Paste your text here...", 
+    height=300,
+    value="Kalki, final avatar (incarnation) of the Hindu god Vishnu, who is yet to appear. At the end of the present Kali yuga (age), when virtue and dharma have disappeared and the world is ruled by the unjust, Kalki will appear to destroy the wicked and to usher in a new age. He will be seated on a white horse with a naked sword in his hand, blazing like a comet. He is less commonly represented in painting and sculpture than the other avatars of Vishnu and is shown either on horseback or accompanied by his horse. According to some legends of the end of the world, Kalki’s horse will stamp the earth with its right foot, causing the tortoise which supports the world to drop into the deep. Then the gods will restore the earth once again to its former purity."
+)
 
-    wn_keywords = []
-    wn_definitions = []
+button = st.button("✨ Generate", use_container_width=True)
 
-    url = "http://127.0.0.1:8000/matches"
-    response = requests.post(url, params={"q":str(input_text)})
+if 'keywords' not in st.session_state:
+    st.session_state.keywords = []
 
-    if response.status_code == 200:
-        keywords = response.json().get("keywords")
+if 'definitions' not in st.session_state:
+    st.session_state.definitions = []
 
-        #punctuation and stopwords removal from the text followed by lemmatization
-        stop_words = set(stopwords.words("english"))
-        text_no_punc = input_text.translate(str.maketrans("","",string.punctuation))
-        word_tokens = word_tokenize(text_no_punc.lower())
-        #filtered_sentence = [w for w in word_tokens if not w in stop_words]
-        lemmatizer = WordNetLemmatizer()
-        lemmatized_sentence = [lemmatizer.lemmatize(w) for w in word_tokens]
-        
-        try:
-            for i in keywords:
-                wn_keywords.append(i)
-                wn_definitions.append(lesk(lemmatized_sentence, i).definition())
-        except AttributeError:
-            pass
+if button:
 
-        #Sampling withput replacement and Generate the output
-        sample = random.sample(wn_keywords, len(wn_keywords)-1)
-        try:
-            with st.container(border=True):
-                for i in range(len(sample)):
-                    #print("{:100}{:10}".format(sample[i], wn_definitions[i]))
-                    s1, s2 = st.columns(2)
-                    s1.write(sample[i])
-                    s2.write(wn_definitions[i])
-        except AttributeError:
-            pass
+    if not input_text.strip():
+        st.error("Please provide input text before generating.")
 
     else:
-        print(f"Request failed with status code {response.status_code}")
-        print(f"Response content: {response.content}")
+        url = "http://127.0.0.1:8000/matches"
+        response = requests.post(url, params={"q": str(input_text)})
+
+        if response.status_code == 200:
+            data = response.json()
+            keywords = data.get("keywords")
+            word_tokens = word_tokenize(input_text)
+
+            try:
+                for keyword in keywords:
+                    if keyword not in st.session_state.keywords:
+                        definition = lesk(word_tokens, keyword)
+                        if definition:
+                            st.session_state.definitions.append(definition.definition())
+                            st.session_state.keywords.append(keyword)
+
+            except AttributeError:
+                pass
+
+        else:
+            st.error(f"Status code: {response.status_code}")
+            st.write(f"Error: {response.content}")
+
+if st.session_state.definitions:
+    
+    sample = random.sample(st.session_state.keywords, len(st.session_state.keywords))
+
+    st.success("See the results below!")
+    with st.container():
+        for i in range(len(sample)):
+            col1, col2 = st.columns(2)
+            col1.write(f"🔑 {sample[i]}")
+            col2.write(f"📖 {st.session_state.definitions[i]}")
+
+else:
+    st.warning("No definitions found.")

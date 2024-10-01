@@ -8,9 +8,9 @@ import nltk
 from nltk import tokenize
 from nltk.tree import Tree
 from transformers import GPT2Tokenizer, GPT2LMHeadModel
+from sentence_transformers import SentenceTransformer, util
 
-#nltk.download("punkt")
-#benepar.download("benepar_en3")
+
 nlp = spacy.load("en_core_web_md")
 nlp.add_pipe("benepar", config={"model":"benepar_en3"})
 
@@ -61,11 +61,29 @@ def get_true_false_questions(partial_sentence):
   
   input_ids = GPT2_tokenizer.encode(partial_sentence, return_tensors='pt')
   maximum_length = len(partial_sentence.split()) + 40
-  print(partial_sentence)
-  sample_outputs = GPT2_model.generate(input_ids, do_sample=True, max_length=maximum_length, top_k=60, top_p=0.8, repetition_penalty=10.0, num_return_sequences=12)
+  sample_outputs = GPT2_model.generate(
+    input_ids, 
+    do_sample=True, 
+    max_length=maximum_length, 
+    top_p=0.80, # 0.85 
+    top_k=60,   #30
+    repetition_penalty  = 10.0,
+    num_return_sequences=5
+)
   generated_sentences = []
   for i,sample_output in enumerate(sample_outputs):
     decoded_sentence = GPT2_tokenizer.decode(sample_output, skip_special_tokens=True)
     final_sentence = tokenize.sent_tokenize(decoded_sentence)[0]
     generated_sentences.append(final_sentence)
   return generated_sentences
+
+def semantic_textual_similarity(generated_sentences, q):
+
+  model = SentenceTransformer("sentence-transformers/all-MiniLM-L6-v2")
+  embedding_two = model.encode(q, convert_to_tensor=True)
+  for i in generated_sentences:
+    embedding_one = model.encode(i, convert_to_tensor=True)
+  
+if __name__ == "__main__":
+  nltk.download("punkt")
+  benepar.download("benepar_en3")
