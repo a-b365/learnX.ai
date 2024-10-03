@@ -4,7 +4,6 @@ import random
 # Third party imports
 import requests
 import streamlit as st
-import nltk
 
 st.markdown("<h3 style='text-align: center;'>✅ Fill in the Blanks Generator</h3>", unsafe_allow_html=True)
 
@@ -32,6 +31,7 @@ if button:
         
     else:
         url = "http://127.0.0.1:8000/blanks"
+
         response = requests.post(url, params={"q": str(input_text)})
 
         if response.status_code == 200:

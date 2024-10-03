@@ -1,5 +1,6 @@
 import random
 import requests
+
 import streamlit as st
 
 value = """Kalki, final avatar (incarnation) of the Hindu god Vishnu, who is yet to appear."""
@@ -25,6 +26,7 @@ if 'answers' not in st.session_state:
 
 if button:
     url = "http://127.0.0.1:8000/true_false"
+
     response = requests.post(url, params={"q": str(input_text)})
     
     if response.status_code == 200:

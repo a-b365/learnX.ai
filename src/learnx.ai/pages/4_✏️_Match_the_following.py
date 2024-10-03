@@ -1,6 +1,7 @@
 # Standard library imports
 import string
 import random
+from time import time_ns
 
 # Third party imports
 import requests
@@ -34,8 +35,9 @@ if button:
 
     else:
         url = "http://127.0.0.1:8000/matches"
-        response = requests.post(url, params={"q": str(input_text)})
 
+        response = requests.post(url, params={"q": str(input_text)})
+        
         if response.status_code == 200:
             data = response.json()
             keywords = data.get("keywords")
@@ -66,6 +68,3 @@ if st.session_state.definitions:
             col1, col2 = st.columns(2)
             col1.write(f"🔑 {sample[i]}")
             col2.write(f"📖 {st.session_state.definitions[i]}")
-
-else:
-    st.warning("No definitions found.")

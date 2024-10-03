@@ -8,7 +8,7 @@ from fastapi import FastAPI
 
 #Local application imports
 from Mcq import get_distractors, get_qa
-from True_false import get_tree, get_flattened, get_rvp_nvp, get_termination_portion, get_true_false_questions, semantic_textual_similarity
+from True_false import get_tree, get_flattened, get_rvp_nvp, get_termination_portion, get_true_false_questions
 from TokenClassification import post_processing, aggregate_entities
 
 app = FastAPI()
@@ -20,11 +20,9 @@ def read_root():
 @app.post("/mcqs")
 def get_mcqs(q:str):
     questions, answers = get_qa(q)
-    
     distractors = [get_distractors(i) for i in answers]
-
     return {"questions":questions, 
-            "answers":answers, 
+            "answers":answers,
             "distractors": distractors, 
             }
 
@@ -45,7 +43,6 @@ def generate_blanks(q:str):
         answers.append(answer)
         print(answer)
         question = question.replace(answer,"____________")
-
     return {"answers":answers,"question":question}
     
 
